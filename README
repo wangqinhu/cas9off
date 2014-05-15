@@ -52,8 +52,8 @@ Usage:
     
     -h  Help
     -t  Test demo
-    -q  Query file, in FASTA format, contains the target sites
-    -r  Query site length, default is 23 bp, including NGG
+    -q  Query RNA file, in FASTA format, contains the target sites
+    -r  Query RNA length, default is 23 bp, including NGG
     -d  Database file, in FASTA format, contains reference sequences
     -l  Length of flanking sequences to extract, default is 500 bp
     -n  Number of mismatch (0-5), does not include NGG

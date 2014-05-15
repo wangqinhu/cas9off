@@ -63,14 +63,14 @@ use Getopt::Std;
 my %options;
 getopts("q:r:d:l:n:o:s:m:tfh" , \%options);
 
-my $rna = $options{q};
-my $rsz = $options{r} || '23';
-my $ref = $options{d};
-my $len = $options{l} || '500';
-my $mis = $options{n} || '5';
-my $rpt = $options{o} || 'cas9off.xls';
-my $smf = $options{s} || 'sum.xls';
-my $mem = $options{m} || '2048';
+my $rna = $options{q};                      # Query RNA sequence file
+my $rsz = $options{r} || '23';              # RNA size
+my $ref = $options{d};                      # Database for searching, reference file
+my $len = $options{l} || '500';             # Length of flanking sequence to extrat (for primer design)
+my $mis = $options{n} || '5';               # Number of mismatch allowed
+my $rpt = $options{o} || 'cas9off.xls';     # Output report file, tab-delimited file
+my $smf = $options{s} || 'sum.xls';         # Summary file shows the statics result of the off-targeted sites
+my $mem = $options{m} || '2048';            # Memory allocated, required by seqmap
 
 # Usage
 &usage() if $options{h};
@@ -335,8 +335,8 @@ Usage:
     
     -h  Help
     -t  Test demo
-    -q  Query file, in FASTA format, contains the target sites
-    -r  Query site length, default is 23 bp, including NGG
+    -q  Query RNA file, in FASTA format, contains the target sites
+    -r  Query RNA length, default is 23 bp, including NGG
     -d  Database file, in FASTA format, contains reference sequences
     -l  Length of flanking sequences to extract, default is 500 bp
     -n  Number of mismatch (0-5), does not include NGG
