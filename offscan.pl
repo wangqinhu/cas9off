@@ -281,51 +281,51 @@ sub revcom_seq {
 }
 
 sub format_seqid {
-die "Database file required!\n" unless $options{d};
-my ($in) = @_;
-my $out = 'refseq.fa';
-print "Formatting DB ...\n";
-open (IN, $in) or die "Cannot open file $in: $!\n";
-open (OUT,">$out" ) or die "Cannot open file $out: $!\n";
-while (<IN>) {
-	if (/^\>(\S+)/) {
-		my $sid = $1;
-		print OUT ">$sid\n";
-	} else {
-		print OUT $_;
+	die "Database file required!\n" unless $options{d};
+	my ($in) = @_;
+	my $out = 'refseq.fa';
+	print "Formatting DB ...\n";
+	open (IN, $in) or die "Cannot open file $in: $!\n";
+	open (OUT,">$out" ) or die "Cannot open file $out: $!\n";
+	while (<IN>) {
+		if (/^\>(\S+)/) {
+			my $sid = $1;
+			print OUT ">$sid\n";
+		} else {
+			print OUT $_;
+		}
 	}
-}
-close IN;
-close OUT;
-$ref = 'refseq.fa';
+	close IN;
+	close OUT;
+	$ref = 'refseq.fa';
 }
 
 sub ios {
-my $os = $^O;
-my $osid = undef;
-if($os  eq  "darwin") {
-	$osid = 0;
-} elsif($os  eq  "linux") {
-	my $bit=`getconf LONG_BIT`;
-	chomp $bit;
-	if ($bit eq "32") {
-		$osid = 1;
-	} elsif ($bit eq "64")  {
-		$osid = 2;		
+	my $os = $^O;
+	my $osid = undef;
+	if($os  eq  "darwin") {
+		$osid = 0;
+	} elsif($os  eq  "linux") {
+		my $bit=`getconf LONG_BIT`;
+		chomp $bit;
+		if ($bit eq "32") {
+			$osid = 1;
+		} elsif ($bit eq "64")  {
+			$osid = 2;		
+		} else {
+			die "Unkown CPU!\n";	
+		}
+	} elsif($os  eq  "MSWin32") {
+		$osid = 3;
 	} else {
-		die "Unkown CPU!\n";	
+		die "Unknown OS detected by cas9off!\n";
 	}
-} elsif($os  eq  "MSWin32") {
-	$osid = 3;
-} else {
-	die "Unknown OS detected by cas9off!\n";
-}
-return $osid;
+	return $osid;
 }
 
 sub usage
 {
-print <<USAGE;
+	print <<USAGE;
 
 cas9off version 1.0
 
@@ -356,7 +356,7 @@ Usage:
       genome editing in Xenopus tropicalis. Development, 141(3):707-714.
 
 USAGE
-exit;
+	exit;
 }
 
 
