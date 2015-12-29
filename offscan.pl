@@ -7,8 +7,8 @@
 
 =head1 VERSION
 
-  Version: 1.0
-  Feb 8, 2014
+  Version: 1.1
+  Dec 29, 2015
 
 =head1 SYNOPSIS
 
@@ -61,7 +61,7 @@ use Getopt::Std;
 # Get Options
 #-------------------------------------------------------------------------------
 my %options;
-getopts("q:r:d:l:n:o:s:m:tfh" , \%options);
+getopts("q:r:d:l:n:o:s:m:f:th" , \%options);
 
 my $rna = $options{q};                      # Query RNA sequence file
 my $rsz = $options{r} || '23';              # RNA size
@@ -71,12 +71,10 @@ my $mis = $options{n} || '5';               # Number of mismatch allowed
 my $rpt = $options{o} || 'cas9off.xls';     # Output report file, tab-delimited file
 my $smf = $options{s} || 'sum.xls';         # Summary file shows the statics result of the off-targeted sites
 my $mem = $options{m} || '2048';            # Memory allocated, required by seqmap
+my $fmt = $options{f} || "true";            # Format reference fasta
 
 # Usage
 &usage() if $options{h};
-
-# Format DB
-&format_seqid($options{d}) if $options{f};
 
 #-------------------------------------------------------------------------------
 # Run demo
@@ -86,8 +84,10 @@ if ($options{t}) {
 	$ref = 'demo/reference.fa';
 	$rpt = 'demo.cas9off.xls';
 	$smf = 'demo.sum.xls';
+	$fmt = 'false';
 }
 
+# Check inputs
 unless (defined($rna) && defined($ref)) {
 	&usage();
 }
@@ -99,6 +99,9 @@ my $app = $osp[&ios()];
 
 # Map file, required by seqmap
 my $map = "seqmap.out";
+
+# Format DB
+&format_seqid($options{d}) if $fmt eq "true";
 
 # Check NGG
 open (NGG, $rna) or die "Cannot open file $rna: $!\n";
@@ -327,7 +330,7 @@ sub usage
 {
 	print <<USAGE;
 
-cas9off version 1.0
+cas9off version 1.1
 
 Usage:
 
@@ -343,8 +346,8 @@ Usage:
     -o  Output filename, default is cas9off.xls
     -s  Summary filename, default is sum.xls
     -m  Memory size, default is 2048 [Mb (2Gb)]
-    -f  Format reference sequence,
-        optional unless your FASTA file has annotation
+    -f  Format reference sequence or not, can be 'true' [default] or 'false',
+        critical if your FASTA file has annotation
 
     For citation:
 	
