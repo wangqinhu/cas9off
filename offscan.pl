@@ -7,8 +7,8 @@
 
 =head1 VERSION
 
-  Version: 1.1
-  Dec 29, 2015
+  Version: 1.2
+  Apr 30, 2016
 
 =head1 SYNOPSIS
 
@@ -61,7 +61,7 @@ use Getopt::Std;
 # Get Options
 #-------------------------------------------------------------------------------
 my %options;
-getopts("q:r:d:l:n:o:s:m:f:th" , \%options);
+getopts("q:r:d:l:n:o:s:m:f:a:th" , \%options);
 
 my $rna = $options{q};                      # Query RNA sequence file
 my $rsz = $options{r} || '23';              # RNA size
@@ -72,6 +72,7 @@ my $rpt = $options{o} || 'cas9off.xls';     # Output report file, tab-delimited 
 my $smf = $options{s} || 'sum.xls';         # Summary file shows the statics result of the off-targeted sites
 my $mem = $options{m} || '2048';            # Memory allocated, required by seqmap
 my $fmt = $options{f} || "true";            # Format reference fasta
+my $app = $options{a};                      # Path of seqmap, default ./bin/seqmap*
 
 # Usage
 &usage() if $options{h};
@@ -95,7 +96,9 @@ unless (defined($rna) && defined($ref)) {
 # Judge OS
 # Support Mac, Linux (32 and 64 bit) and Windows
 my @osp = ("./bin/seqmap", "./bin/seqmap-1.0.12-linux", "./bin/seqmap-1.0.12-linux-64", "./bin/seqmap-1.0.12-windows.exe");
-my $app = $osp[&ios()];
+if ($app eq '') {
+	$app = $osp[&ios()];
+}
 
 # Map file, required by seqmap
 my $map = "seqmap.out";
@@ -330,7 +333,7 @@ sub usage
 {
 	print <<USAGE;
 
-cas9off version 1.1
+cas9off version 1.2
 
 Usage:
 
@@ -348,6 +351,7 @@ Usage:
     -m  Memory size, default is 2048 [Mb (2Gb)]
     -f  Format reference sequence or not, can be 'true' [default] or 'false',
         critical if your FASTA file has annotation
+    -a  Path of seqman, default './bin/seqmap*'
 
     For citation:
 	
