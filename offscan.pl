@@ -7,7 +7,7 @@
 
 =head1 VERSION
 
-  Version: 1.2
+  Version: 1.3
   Apr 30, 2016
 
 =head1 SYNOPSIS
@@ -61,7 +61,7 @@ use Getopt::Std;
 # Get Options
 #-------------------------------------------------------------------------------
 my %options;
-getopts("q:r:d:l:n:o:s:m:f:a:th" , \%options);
+getopts("q:r:d:l:n:o:s:m:f:a:b:th" , \%options);
 
 my $rna = $options{q};                      # Query RNA sequence file
 my $rsz = $options{r} || '23';              # RNA size
@@ -73,6 +73,8 @@ my $smf = $options{s} || 'sum.xls';         # Summary file shows the statics res
 my $mem = $options{m} || '2048';            # Memory allocated, required by seqmap
 my $fmt = $options{f} || "true";            # Format reference fasta
 my $app = $options{a};                      # Path of seqmap, default ./bin/seqmap*
+my $map = $options{b} || "seqmap.out";      # Map file, seqmap output
+
 
 # Usage
 &usage() if $options{h};
@@ -99,9 +101,6 @@ my @osp = ("./bin/seqmap", "./bin/seqmap-1.0.12-linux", "./bin/seqmap-1.0.12-lin
 if ($app eq '') {
 	$app = $osp[&ios()];
 }
-
-# Map file, required by seqmap
-my $map = "seqmap.out";
 
 # Format DB
 &format_seqid($options{d}) if $fmt eq "true";
@@ -333,7 +332,7 @@ sub usage
 {
 	print <<USAGE;
 
-cas9off version 1.2
+cas9off version 1.3
 
 Usage:
 
@@ -352,6 +351,7 @@ Usage:
     -f  Format reference sequence or not, can be 'true' [default] or 'false',
         critical if your FASTA file has annotation
     -a  Path of seqman, default './bin/seqmap*'
+    -b  Map file, seqmap output
 
     For citation:
 	
