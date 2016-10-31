@@ -7,8 +7,8 @@
 
 =head1 VERSION
 
-  Version: 1.3
-  Apr 30, 2016
+  Version: 1.4
+  Oct 31, 2016
 
 =head1 SYNOPSIS
 
@@ -61,9 +61,10 @@ use Getopt::Std;
 # Get Options
 #-------------------------------------------------------------------------------
 my %options;
-getopts("q:r:d:l:n:o:s:m:f:a:b:th" , \%options);
+getopts("g:q:r:d:l:n:o:s:m:f:a:b:th" , \%options);
 
-my $rna = $options{q};                      # Query RNA sequence file
+my $grd = $options{g};                      # Query RNA in sgRNA Designer format
+my $rna = $options{q};                      # Query RNA in FASTA format
 my $rsz = $options{r} || '23';              # RNA size
 my $ref = $options{d};                      # Database for searching, reference file
 my $len = $options{l} || '500';             # Length of flanking sequence to extrat (for primer design)
@@ -72,7 +73,7 @@ my $rpt = $options{o} || 'cas9off.xls';     # Output report file, tab-delimited 
 my $smf = $options{s} || 'sum.xls';         # Summary file shows the statics result of the off-targeted sites
 my $mem = $options{m} || '2048';            # Memory allocated, required by seqmap
 my $fmt = $options{f} || "true";            # Format reference fasta
-my $app = $options{a};                      # Path of seqmap, default ./bin/seqmap*
+my $app = $options{a} || "";                # Path of seqmap
 my $map = $options{b} || "seqmap.out";      # Map file, seqmap output
 
 
@@ -91,6 +92,15 @@ if ($options{t}) {
 }
 
 # Check inputs
+if (defined($grd) && defined($rna)) {
+	warn "Aborted: Both [sgRNA Designer format, -g] and [fasta format, -q] were found.\nPlease use one of them!\n";
+	&usage();
+}
+
+if (defined($grd)) {
+	$rna = sgRNA2fasta($grd);
+}
+
 unless (defined($rna) && defined($ref)) {
 	&usage();
 }
@@ -328,11 +338,37 @@ sub ios {
 	return $osid;
 }
 
+sub sgRNA2fasta {
+	my $in_file = shift;
+	my $out_file = "sgRNA.fa";
+	my $head = 4;
+	my $tail = 3;
+	my $gRNA = 23;
+	my %seq = ();
+	my $id = 'seq00000';
+	open (IN, $in_file) or die "Cannot open $in_file : $!\n";
+	open (OUT, ">$out_file") or die "Cannot open $out_file : $!\n";
+	while (<IN>) {
+		chomp;
+		next if /^\s*$/;
+		next if /^Spacer/;
+		if (/\S{$head}(\S{$gRNA})\S{$tail}/) {
+			$id++;
+			print OUT ">$id\n$1\n";
+		} else {
+			print STDERR "Unknwow gRNA found in $in_file!\n";
+		}
+	}
+	close OUT;
+	close IN;
+	return $out_file;
+}
+
 sub usage
 {
 	print <<USAGE;
 
-cas9off version 1.3
+cas9off version 1.4
 
 Usage:
 
@@ -340,7 +376,8 @@ Usage:
     
     -h  Help
     -t  Test demo
-    -q  Query RNA file, in FASTA format, contains the target sites
+    -g  Query RNA file, in sgRNA desinger output format
+    -q  Query RNA file, in FASTA format
     -r  Query RNA length, default is 23 bp, including NGG
     -d  Database file, in FASTA format, contains reference sequences
     -l  Length of flanking sequences to extract, default is 500 bp
@@ -350,7 +387,7 @@ Usage:
     -m  Memory size, default is 2048 [Mb (2Gb)]
     -f  Format reference sequence or not, can be 'true' [default] or 'false',
         critical if your FASTA file has annotation
-    -a  Path of seqman, default './bin/seqmap*'
+    -a  Path of seqmap
     -b  Map file, seqmap output
 
     For citation:

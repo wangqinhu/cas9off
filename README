@@ -3,8 +3,8 @@ ABOUT
                       target sites of CRISPR/CAS9 system by using seqmap
 
 VERSION
-         Version: 1.3
-         Apr 30, 2016
+         Version: 1.4
+         Oct 31, 2016
 
 SYNOPSIS
          $ perl ./offscan.pl <option>
@@ -43,16 +43,17 @@ LICENSE
 		 
 
 
-cas9off version 1.1
+cas9off version 1.4
 ===================
 
 Usage:
 
     offscan.pl <option>
-    
+
     -h  Help
     -t  Test demo
-    -q  Query RNA file, in FASTA format, contains the target sites
+    -g  Query RNA file, in sgRNA desinger output format
+    -q  Query RNA file, in FASTA format
     -r  Query RNA length, default is 23 bp, including NGG
     -d  Database file, in FASTA format, contains reference sequences
     -l  Length of flanking sequences to extract, default is 500 bp
@@ -62,7 +63,7 @@ Usage:
     -m  Memory size, default is 2048 [Mb (2Gb)]
     -f  Format reference sequence or not, can be 'true' [default] or 'false',
         critical if your FASTA file has annotation
-    -a  Path of seqman, default './bin/seqmap*'
+    -a  Path of seqmap
     -b  Map file, seqmap output
 
     For citation:
@@ -72,4 +73,4 @@ Usage:
 	
     * Guo, XG., Zhang, TJ., Hu, Z., Zhang, YQ., Shi ZY., Wang, QH., Cui, Y.,
       Wang, FQ., Zhao, H. and Chen, YL. (2014) Efficient RNA/Cas9-mediated
-      genome editing in Xenopus tropicalis. Development, 141(3):707-714.	  
+      genome editing in Xenopus tropicalis. Development, 141(3):707-714.
