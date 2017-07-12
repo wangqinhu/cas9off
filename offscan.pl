@@ -7,8 +7,8 @@
 
 =head1 VERSION
 
-  Version: 1.4
-  Oct 31, 2016
+  Version: 1.5
+  Jul 12, 2017
 
 =head1 SYNOPSIS
 
@@ -215,12 +215,12 @@ while (<MAP>) {
 	next unless $maln =~ /GG$/i;
 	$map[$i++] = {	"refid"  => $refid,
 			"refcor" => $refcor,
-			"refaln" => $maln,
+			"refaln" => uc($maln),
 			"rnaid"  => $rnaid,
-			"rnaseq" => $rnaseq . "NGG",
+			"rnaseq" => uc($rnaseq . "NGG"),
 			"numis"  => $numis,
 			"str"    => $str,
-			"flk"    => $flk
+			"flk"    => uc($flk)
 	};
 	push @tab, $rnaid;
 }
@@ -233,8 +233,9 @@ close MAP;
 open (OUT, ">$rpt") or die "Cannot open file $rpt: $!\n";
 print OUT "Target ID\tTarget Site\tReference ID\tReference Alignment\tNo. of Mismatch\tStrand\tMatch Start\tFlanking Sequence\n";
 foreach my $map (@map) {
+	my $diff_aln = mark_diff_aln($map->{"refaln"}, $map->{"rnaseq"});
 	print OUT $map->{"rnaid"}, "\t", $map->{"rnaseq"}, "\t", $map->{"refid"}, "\t",
-		  $map->{"refaln"}, "\t", $map->{"numis"}, "\t", $map->{"str"}, "\t",
+		  $diff_aln, "\t", $map->{"numis"}, "\t", $map->{"str"}, "\t",
 		  $map->{"refcor"}, "\t", $map->{"flk"}, "\n";
 }
 close OUT;
@@ -364,11 +365,25 @@ sub sgRNA2fasta {
 	return $out_file;
 }
 
+sub mark_diff_aln {
+	my ($aln, $rna) = @_;
+	my $len = $rsz - 3;
+	my @aln = split //, $aln;
+	my @rna = split //, $rna;
+	for (my $i = 0; $i < $len; $i++) {
+		if ($aln[$i] ne $rna[$i]) {
+			$aln[$i] = lc($aln[$i]);
+		}
+	}
+	my $diff_aln = join('', @aln);
+	return $diff_aln;
+}
+
 sub usage
 {
 	print <<USAGE;
 
-cas9off version 1.4
+cas9off version 1.5
 
 Usage:
 

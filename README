@@ -3,8 +3,8 @@ ABOUT
                       target sites of CRISPR/CAS9 system by using seqmap
 
 VERSION
-         Version: 1.4
-         Oct 31, 2016
+         Version: 1.5
+         Jul 12, 2017
 
 SYNOPSIS
          $ perl ./offscan.pl <option>
@@ -43,7 +43,7 @@ LICENSE
 		 
 
 
-cas9off version 1.4
+cas9off version 1.5
 ===================
 
 Usage:
