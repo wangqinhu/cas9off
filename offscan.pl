@@ -7,8 +7,8 @@
 
 =head1 VERSION
 
-  Version: 1.5
-  Jul 12, 2017
+  Version: 1.5.1
+  Jul 24, 2017
 
 =head1 SYNOPSIS
 
@@ -28,7 +28,7 @@
   oligonucleotides to the genome, Bioinformatics, 24(20):2395-2396.
   And available at http://www-personal.umich.edu/~jianghui/seqmap/
   
-  This script is used in the following research:
+  This script is firstly used in the following research:
   Guo, XG., Zhang, TJ., Hu, Z., Zhang, YQ., Shi ZY., Wang, QH., Cui, Y.,
   Wang, FQ., Zhao, H. and Chen, YL. (2014) Efficient RNA/Cas9-mediated
   genome editing in Xenopus tropicalis. Development, 141(3):707-714.
@@ -329,7 +329,7 @@ sub ios {
 		} elsif ($bit eq "64")  {
 			$osid = 2;		
 		} else {
-			die "Unkown CPU!\n";	
+			die "Unknown CPU!\n";
 		}
 	} elsif($os  eq  "MSWin32") {
 		$osid = 3;
@@ -357,7 +357,7 @@ sub sgRNA2fasta {
 			$id++;
 			print OUT ">$id\n$1\n";
 		} else {
-			print STDERR "Unknwow gRNA found in $in_file!\n";
+			print STDERR "Unknown gRNA found in $in_file!\n";
 		}
 	}
 	close OUT;
@@ -383,7 +383,7 @@ sub usage
 {
 	print <<USAGE;
 
-cas9off version 1.5
+cas9off version 1.5.1
 
 Usage:
 
